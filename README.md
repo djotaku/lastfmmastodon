@@ -20,7 +20,9 @@ This app is written with the assumption that you're Tooting from your own accoun
         "mastodon":
             {
                     "access_token": "Mastodon Access Token",
-                    "api_base_url": "URL of your Mastodon instance"
+                    "api_base_url": "URL of your Mastodon instance",
+                    "clientID": "a string",
+                    "clientsecret": "a string",
             }
 }
 
