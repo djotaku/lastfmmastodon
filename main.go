@@ -154,8 +154,6 @@ func registerClient(baseURL string) mastodonConfig {
 	if err != nil {
 		log.Fatal(err)
 	}
-	//to get access token the first time
-
 	// Have the user manually get the token and send it back to us
 	u, err := url.Parse(app.AuthURI)
 	if err != nil {
@@ -171,6 +169,12 @@ func registerClient(baseURL string) mastodonConfig {
 		ClientID:     app.ClientID,
 		ClientSecret: app.ClientSecret,
 		AccessToken:  token,
+	}
+	c := mastodon.NewClient(config)
+	err = c.AuthenticateToken(context.Background(), config.AccessToken, "urn:ietf:wg:oauth:2.0:oob")
+	if err != nil {
+		fmt.Println("authentication token failed")
+		log.Fatal(err)
 	}
 
 	var newMastodonConfig mastodonConfig
@@ -229,11 +233,6 @@ func main() {
 			AccessToken:  ourSecrets.Mastodon.Access_token,
 		}
 		c := mastodon.NewClient(config)
-		err = c.AuthenticateToken(context.Background(), config.AccessToken, "urn:ietf:wg:oauth:2.0:oob")
-		if err != nil {
-			fmt.Println("authentication token failed")
-			log.Fatal(err)
-		}
 
 		visibility := "public"
 
