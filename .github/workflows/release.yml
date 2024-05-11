@@ -1,3 +1,5 @@
+name: Build Packages on Release
+
 on:
     release:
       types: [created]
