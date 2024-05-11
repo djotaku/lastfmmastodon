@@ -1,4 +1,6 @@
 # lastfmmastodon
+[![Go Build and Test](https://github.com/djotaku/lastfmmastodon/actions/workflows/goBuildTest.yaml/badge.svg)](https://github.com/djotaku/lastfmmastodon/actions/workflows/goBuildTest.yaml)
+
 Toot your weekly and/or yearly last.fm stats to Mastodon
 
 This app is written with the assumption that you're Tooting from your own account rather than a bot account (although the steps might be similar).
