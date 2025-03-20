@@ -213,7 +213,7 @@ func main() {
 		fmt.Printf("Unable to marshall. %s", err)
 	}
 	tootString := assembleTootString(weeklyArtsts, *period)
-	fmt.Printf("Your toot will be: %s", tootString)
+	fmt.Printf("Your toot will be: %s\n\n", tootString)
 
 	if *register {
 
@@ -253,6 +253,6 @@ func main() {
 			log.Fatalf("%#v\n", err)
 		}
 
-		fmt.Printf("My new post is %v\n", post)
+		fmt.Printf("\n\nMy new post is %v\n", post)
 	}
 }
