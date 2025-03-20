@@ -88,10 +88,13 @@ func submitLastfmCommand(period string, apiKey string, user string) (string, err
 	queryParameters := url.Values{}
 	queryParameters.Set("method", "user.gettopartists")
 	queryParameters.Set("user", user)
-	if period == "weekly" {
+	switch period{
+	case "weekly":
 		queryParameters.Set("period", "7day")
-	} else {
+	case "annual":
 		queryParameters.Set("period", "12month")
+	case "quarterly":
+		queryParameters.Set("period", "3month")
 	}
 	queryParameters.Set("api_key", apiKey)
 	queryParameters.Set("format", "json")
@@ -126,10 +129,13 @@ func WebGet(url string) (string, int, error) {
 
 func assembleTootString(artists topArtistsResult, period string) string {
 	var tootString string
-	if period == "weekly" {
+	switch period{
+		case "weekly": 
 		tootString = "My top #lastfm artists for the past week: "
-	} else {
+	case "annual":
 		tootString = "My top #lastfm artists for the past 12 months: "
+	case "quarterly":
+		tootString = "My top #lastfm artists for the past 3 months: "
 	}
 	for _, artist := range artists.Topartists.Artist {
 		potentialString := fmt.Sprintf("%s.%s (%s), ", artist.Attribute.Rank, artist.Name, artist.Playcount)
@@ -194,7 +200,7 @@ func main() {
 	ourSecrets := getSecrets()
 	// parse CLI flags
 	register := flag.Bool("r", false, "register the client")
-	period := flag.String("p", "weekly", "period to grab. Use: weekly or annual")
+	period := flag.String("p", "weekly", "period to grab. Use: weekly, quarterly, or annual")
 	flag.Parse()
 
 	weeklyArtistsJSON, err := submitLastfmCommand(*period, ourSecrets.Lastfm.Key, ourSecrets.Lastfm.Username)
@@ -206,8 +212,8 @@ func main() {
 	if err != nil {
 		fmt.Printf("Unable to marshall. %s", err)
 	}
-	tootString := assembleTootString(weeklyArtsts, "weekly")
-	fmt.Printf("Your toot will be: %s", tootString)
+	tootString := assembleTootString(weeklyArtsts, *period)
+	fmt.Printf("Your toot will be: %s\n\n", tootString)
 
 	if *register {
 
@@ -247,6 +253,6 @@ func main() {
 			log.Fatalf("%#v\n", err)
 		}
 
-		fmt.Printf("My new post is %v\n", post)
+		fmt.Printf("\n\nMy new post is %v\n", post)
 	}
 }
