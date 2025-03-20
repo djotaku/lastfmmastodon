@@ -194,7 +194,7 @@ func main() {
 	ourSecrets := getSecrets()
 	// parse CLI flags
 	register := flag.Bool("r", false, "register the client")
-	period := flag.String("p", "weekly", "period to grab. Use: weekly or annual")
+	period := flag.String("p", "weekly", "period to grab. Use: weekly, quarterly, or annual")
 	flag.Parse()
 
 	weeklyArtistsJSON, err := submitLastfmCommand(*period, ourSecrets.Lastfm.Key, ourSecrets.Lastfm.Username)
@@ -206,7 +206,7 @@ func main() {
 	if err != nil {
 		fmt.Printf("Unable to marshall. %s", err)
 	}
-	tootString := assembleTootString(weeklyArtsts, "weekly")
+	tootString := assembleTootString(weeklyArtsts, *period)
 	fmt.Printf("Your toot will be: %s", tootString)
 
 	if *register {
