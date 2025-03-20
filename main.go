@@ -88,10 +88,13 @@ func submitLastfmCommand(period string, apiKey string, user string) (string, err
 	queryParameters := url.Values{}
 	queryParameters.Set("method", "user.gettopartists")
 	queryParameters.Set("user", user)
-	if period == "weekly" {
+	switch period{
+	case "weekly":
 		queryParameters.Set("period", "7day")
-	} else {
+	case "annual":
 		queryParameters.Set("period", "12month")
+	case "quarterly":
+		queryParameters.Set("period", "3month")
 	}
 	queryParameters.Set("api_key", apiKey)
 	queryParameters.Set("format", "json")
@@ -126,10 +129,13 @@ func WebGet(url string) (string, int, error) {
 
 func assembleTootString(artists topArtistsResult, period string) string {
 	var tootString string
-	if period == "weekly" {
+	switch period{
+		case "weekly": 
 		tootString = "My top #lastfm artists for the past week: "
-	} else {
+	case "annual":
 		tootString = "My top #lastfm artists for the past 12 months: "
+	case "quarterly":
+		tootString = "My top #lastfm artists for the past 3 months: "
 	}
 	for _, artist := range artists.Topartists.Artist {
 		potentialString := fmt.Sprintf("%s.%s (%s), ", artist.Attribute.Rank, artist.Name, artist.Playcount)
