@@ -11,7 +11,7 @@ import (
 	"net/url"
 	"os"
 
-	"github.com/djotaku/go-mastodon"
+	"github.com/mattn/go-mastodon"
 
 	"github.com/adrg/xdg"
 )
@@ -69,6 +69,14 @@ type attribute struct {
 	Rank string
 }
 
+type overallAttribute struct {
+	User       string
+	totalPages string
+	page       string
+	perPage    string
+	Total      string
+}
+
 type artist struct {
 	Playcount string
 	Attribute attribute `json:"@attr"`
@@ -76,7 +84,8 @@ type artist struct {
 }
 
 type topArtists struct {
-	Artist []artist
+	Artist    []artist
+	Attribute overallAttribute `json:"@attr"`
 }
 
 type topArtistsResult struct {
@@ -88,7 +97,7 @@ func submitLastfmCommand(period string, apiKey string, user string) (string, err
 	queryParameters := url.Values{}
 	queryParameters.Set("method", "user.gettopartists")
 	queryParameters.Set("user", user)
-	switch period{
+	switch period {
 	case "weekly":
 		queryParameters.Set("period", "7day")
 	case "annual":
@@ -129,13 +138,13 @@ func WebGet(url string) (string, int, error) {
 
 func assembleTootString(artists topArtistsResult, period string) string {
 	var tootString string
-	switch period{
-		case "weekly": 
-		tootString = "My top #lastfm artists for the past week: "
+	switch period {
+	case "weekly":
+		tootString = fmt.Sprintf("#music Out of %s songs, my top #lastfm artists for the past week: ", artists.Topartists.Attribute.Total)
 	case "annual":
-		tootString = "My top #lastfm artists for the past 12 months: "
+		tootString = fmt.Sprintf("#music Out of %s songs, my top #lastfm artists for the past 12 months: ", artists.Topartists.Attribute.Total)
 	case "quarterly":
-		tootString = "My top #lastfm artists for the past 3 months: "
+		tootString = fmt.Sprintf("#music Out of %s songs, my top #lastfm artists for the past 3 months: ", artists.Topartists.Attribute.Total)
 	}
 	for _, artist := range artists.Topartists.Artist {
 		potentialString := fmt.Sprintf("%s.%s (%s), ", artist.Attribute.Rank, artist.Name, artist.Playcount)
@@ -201,6 +210,7 @@ func main() {
 	// parse CLI flags
 	register := flag.Bool("r", false, "register the client")
 	period := flag.String("p", "weekly", "period to grab. Use: weekly, quarterly, or annual")
+	debugMode := flag.Bool("d", false, "register the client")
 	flag.Parse()
 
 	weeklyArtistsJSON, err := submitLastfmCommand(*period, ourSecrets.Lastfm.Key, ourSecrets.Lastfm.Username)
@@ -242,17 +252,22 @@ func main() {
 
 		visibility := "public"
 
-		// Post a toot
-		toot := mastodon.Toot{
-			Status:     tootString,
-			Visibility: visibility,
-		}
-		post, err := c.PostStatus(context.Background(), &toot)
+		if *debugMode {
+			fmt.Printf("Result @attrs:\n user: %s\n", weeklyArtsts.Topartists.Attribute.User)
+			fmt.Printf("Toot would be: %s\n", tootString)
+		} else {
+			// Post a toot
+			toot := mastodon.Toot{
+				Status:     tootString,
+				Visibility: visibility,
+			}
+			post, err := c.PostStatus(context.Background(), &toot)
 
-		if err != nil {
-			log.Fatalf("%#v\n", err)
-		}
+			if err != nil {
+				log.Fatalf("%#v\n", err)
+			}
 
-		fmt.Printf("\n\nMy new post is %v\n", post)
+			fmt.Printf("\n\nMy new post is %v\n", post)
+		}
 	}
 }
