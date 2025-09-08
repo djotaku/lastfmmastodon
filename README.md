@@ -5,7 +5,14 @@ Toot your weekly and/or yearly last.fm stats to Mastodon
 
 This app is written with the assumption that you're Tooting from your own account rather than a bot account (although the steps might be similar).
 
+## Usage
+
 - First time run lastfmmastodon -r - this will save off your access token
+- lastfmmastodon -p [weekly|quarterly|annual]
+- lastfmmastodon -d for debug mode where it won't post to Mastodon but will let you know what the post would have been.
+
+### Config
+
 - For last.fm get your key and secret at: https://www.last.fm/api/account/create (more about their API at: https://www.last.fm/api)
 - At $HOME/.config/lastfmmastodon you should have a secrets.json file that looks like:
 
