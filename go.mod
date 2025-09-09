@@ -4,6 +4,7 @@ go 1.24.6
 
 require (
 	github.com/adrg/xdg v0.5.3
+	github.com/djotaku/lastfmgo v0.0.0-20250909000733-357ba50cde7d
 	github.com/mattn/go-mastodon v0.0.10
 )
 
