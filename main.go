@@ -160,7 +160,7 @@ func main() {
 	ourSecrets := getSecrets()
 	// parse CLI flags
 	register := flag.Bool("r", false, "register the client")
-	period := flag.String("p", "weekly", "period to grab. Use: weekly, quarterly, or annual")
+	period := flag.String("p", "weekly", "period to grab. Use: weekly, quarterly, or annual. Default is weekly")
 	debugMode := flag.Bool("d", false, "debug mode")
 	flag.Parse()
 
