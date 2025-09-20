@@ -161,7 +161,7 @@ func main() {
 	// parse CLI flags
 	register := flag.Bool("r", false, "register the client")
 	period := flag.String("p", "weekly", "period to grab. Use: weekly, quarterly, or annual")
-	debugMode := flag.Bool("d", false, "register the client")
+	debugMode := flag.Bool("d", false, "debug mode")
 	flag.Parse()
 
 	weeklyArtistsJSON, err := lastfmgo.SubmitLastfmCommand(*period, ourSecrets.Lastfm.Key, ourSecrets.Lastfm.Username)
