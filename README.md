@@ -1,4 +1,7 @@
 # lastfmmastodon
+
+I am archiving this repo in favor of [lastfmsocials](https://github.com/djotaku/lastfmSocials) which allows you to post to both Mastodon and Bluesky (or one or the other). If you dont want to move to that one, until whatever APIs this code depends on are deprecated, it should still work.
+
 [![Go Build and Test](https://github.com/djotaku/lastfmmastodon/actions/workflows/goBuildTest.yaml/badge.svg)](https://github.com/djotaku/lastfmmastodon/actions/workflows/goBuildTest.yaml)
 
 Toot your weekly and/or yearly last.fm stats to Mastodon
